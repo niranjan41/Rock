@@ -1,0 +1,21 @@
+cities,STUSPS,artist,played,zone,id,latitude,longitude
+Los Angeles,CA,Pearl Jam,4.9,West,1,33.94253611,-118.4080744
+Seattle,WA,YES,3.5,West,2,47.44898194,-122.3093131
+San Francisco,CA,Nirvana,2.5,West,3,37.61900194,-122.3748433
+Sacramento,CA,Jackson Browne,2.2,West,4,38.69542167,-121.5907669
+Portland,OR,Steppenwolf,1.2,West,5,45.54936889,-122.4012519
+Boston,MA,Allman Brothers,5.9,North-East,6,42.3643475,-71.00517917
+Washington,DC,R.E.M,3.3,North-East,7,38.86872333,-77.00747583
+Pittsburgh,PA,Neil young,3,North-East,8,40.35440139,-79.93016889
+Newyork,NY,Billy Joel,2.6,North-East,9,40.63975111,-73.77892556
+Philadelphia,PA,Rod Stewart,2.3,North-East,10,39.87195278,-75.24114083
+Detroit,MI,J. Geils Band,3.1,Mid-West,11,42.2379275,-83.53040889
+Kansas City,MO,Stevie Ray Vaughan,3,Mid-West,12,39.29760528,-94.71390556
+St. Louis,MO,Metallica,2.6,Mid-West,13,38.74768694,-90.35998972
+Chicago,IL,Bruce Springsteen,1.6,Mid-West,14,41.85884389,-87.60791167
+Cincinnati,OH,Bryan Adams,1.5,Mid-West,15,39.24669444,-84.38897222
+San Antonio,TX,Motley Crue,4.3,South,16,29.53369444,-98.46977778
+Tampa Bay,FL,Reo Speedwagon,2.7,South,17,27.97547222,-82.53325
+Houston,TX,Paul McCartney/Wings,2.5,South,18,30.06186111,-95.55277778
+Miami,FL,Billy Joel,1.8,South,19,25.79325,-80.29055556
+Charlotte,NC,Kiss,1.2,South,20,35.21401111,-80.94312583

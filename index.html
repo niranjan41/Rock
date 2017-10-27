@@ -1,0 +1,447 @@
+<!doctype html>
+<html id="visdown" lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Visdown - Markdown for Visualisation</title>
+    <meta name="description" content="Create Simple Visualisation Charts with Markdown">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script src="lib/vega.min.js"></script>
+    <script src="lib/vega-lite.min.js"></script>
+    <script src="lib/vega-embed.min.js"></script>
+    <script src="lib/marked.min.js"></script>
+    <script src="lib/yaml.min.js"></script>
+
+    <style>
+      #visdown-output {
+        max-width: 800px;
+        margin: 0 auto;
+      }
+
+      #visdown-input {
+        display: none;
+      }
+    </style>
+
+</head>
+<body>
+
+<div id="visdown-input">
+  # Why Classic rock Isn't What It Used To Be?
+
+
+  ```vis
+  width: 600
+  height: 400
+  data:
+    url: data/data.csv
+
+  selection:
+    mouHov:
+     type: multi
+     'on': mouseover
+     nearest: true
+
+  mark: bar
+  encoding:
+    x:
+
+      type: nominal
+      field: Release Year
+      axis:
+        grid: 0
+    y:
+      type: quantitative
+      field: PlayCount
+      axis:
+        grid: 0
+
+    tooltip:
+        field: PlayCount
+        type: quantitative
+
+  ```
+
+  ```vis
+  width: 600
+  height: 400
+  data:
+    url: data/list2.csv
+  selection:
+    grid:
+      type: interval
+      bind: scales
+  mark: circle
+  encoding:
+    x:
+      type: quantitative
+      field: Percentage of Plays
+      axis:
+        grid: 0
+
+
+
+
+    y:
+      type: nominal
+      field: Artist
+      saxis:
+        grid: 0
+
+
+    size:
+      field: Percentage of Plays
+      type: quantitative
+    tooltip:
+      field: Artist
+      type: nominal
+
+
+
+
+  ```
+
+  ```vis
+  width: 600
+  height: 400
+  data:
+    url: data/list2.csv
+  selection:
+    paintbrush:
+      type: multi
+      'on': mouseover
+      nearest: true
+
+  mark: circle
+  encoding:
+    x:
+      type: quantitative
+      field: Percentage of Plays
+      axis:
+        grid: 0
+
+    y:
+      type: nominal
+      field: Artist
+      axis:
+        grid: 0
+
+    color:
+      condition:
+        selection: paintbrush
+        field: Percentage of Plays
+        type: nominal
+      value: grey
+
+
+    size:
+      field: Percentage of Plays
+      type: quantitative
+    tooltip:
+      field: Artist
+      type: nominal
+
+
+
+
+  ```
+
+  ```vis
+  width: 600
+  height: 400
+  data:
+    url: data/list1.csv
+
+  mark: bar
+  encoding:
+    x:
+      type: quantitative
+      field: Play Count
+      scale:
+        rangeStep: 1
+
+
+    y:
+      type: ordinal
+      field: Song
+      sort: descending
+    color:
+      type: Ordinal
+      field: Play Count
+    tooltip:
+      type: quantitative
+      field: Play Count
+
+
+  ```
+
+
+  ```vis
+    width: 600
+    height: 400
+    data:
+      url: data/zone.csv
+
+    mark: circle
+    encoding:
+      x:
+        type: nominal
+        field: artist
+
+      y:
+        type: nominal
+        field: cities
+
+      size:
+        field: played
+        type: quantitative
+      color:
+        type: ordinal
+        field: zone
+      tooltip:
+        type: nominal
+        field: artist
+
+
+
+
+  ```
+
+```vis
+
+
+    "$schema": https://vega.github.io/schema/vega/v3.0.json
+    width: 960
+    height: 500
+    autosize: none
+
+    signals:
+    - name: hover
+      value:
+      'on':
+      - events: "@cell:mouseover"
+        update: datum
+      - events: "@cell:mouseout"
+        update: 'null'
+    - name: title
+      value: Classic Rock Across America
+      update: 'hover ? hover.name + '' ('' + hover.iata + '')'' : ''Classic Rock Across America'''
+
+
+    data:
+    - name: zone
+      url: data/zone.csv
+      format:
+        type: csv
+        parse: auto
+    - name: collection
+      url: data/usamap.json
+      format:
+        type: topojson
+        feature: collection
+      transform:
+      - type: lookup
+        from: zone
+        key: STUSPS
+        fields:
+        - STUSPS
+        values:
+        - artist
+
+    projections:
+    - name: projection
+      type: albersUsa
+
+    scales:
+    - name: color
+      type: quantize
+      domain:
+      - 0
+      - 0.15
+      range:
+        scheme: greys-3
+
+
+    legends:
+    - fill: color
+      orient: bottom-right
+      title: Legend
+      format: 0.1%
+      encode:
+        symbols:
+          update:
+            shape:
+              value: square
+            stroke:
+              value: "#ccc"
+            strokeWidth:
+              value: 0.2
+
+    marks:
+    - type: shape
+      from:
+        data: collection
+      encode:
+        enter:
+          tooltip:
+            field: STUSPS
+            type: nominal
+        update:
+          fill:
+            scale: color
+            value: blue
+            field:
+        hover:
+          fill:
+            value: grey
+      transform:
+      - type: geoshape
+        projection: projection
+```
+
+
+  ```vis
+  $schema: https://vega.github.io/schema/vega/v3.0.json
+  width: 960
+  height: 500
+  padding:
+    top: 25
+    left: 0
+    right: 0
+    bottom: 0
+
+
+  signals:
+  - name: hover
+    value:
+    'on':
+    - events: "symbol:mouseover"
+      update: datum
+    - events: "symbol:mouseout"
+      update: 'null'
+  - name: title
+    value: Classic Rock Across America
+    update: 'hover ? hover.artist + '' ('' + hover.cities+ '')'' : ''Classic Rock Across America'''
+
+  data:
+  - name: plays
+    url: data/zone.csv
+    format:
+      type: csv
+      parse: auto
+    transform:
+    - type: aggregate
+      groupby:
+      - played
+      fields:
+      - played
+      as:
+      - played
+  - name: states
+    url: data/usamap.json
+    format:
+      type: topojson
+      feature: collection
+    transform:
+    - type: geopath
+      projection: projection
+  - name: artists
+    url: data/zone.csv
+    format:
+      type: csv
+      parse: auto
+    transform:
+    - type: geopoint
+      projection: projection
+      fields:
+      - longitude
+      - latitude
+    - type: filter
+      expr: datum.x != null && datum.y != null
+
+
+  projections:
+  - name: projection
+    type: albersUsa
+    scale: 1200
+    translate:
+    - signal: width/2
+    - signal: height/2
+
+  scales:
+  - name: size
+    type: linear
+    domain:
+      data: plays
+      field: played
+    range:
+    - 1
+    - 500
+
+
+
+  marks:
+  - type: path
+    from:
+      data: states
+    encode:
+      enter:
+        fill:
+          value: grey
+        stroke:
+          value: "#dedede"
+      update:
+        path:
+          field: path
+  - type: symbol
+    from:
+      data: artists
+    encode:
+      enter:
+        size:
+          scale: size
+          field: played
+        fill:
+          value: steelblue
+        fillOpacity:
+          value: 0.8
+        stroke:
+          value: white
+        strokeWidth:
+          value: 1.5
+      update:
+        x:
+          field: x
+        y:
+          field: y
+  - type: text
+    interactive: false
+    encode:
+      enter:
+        x:
+          signal: width
+          offset: -5
+        y:
+          value: 0
+        fill:
+          value: black
+        fontSize:
+          value: 20
+        align:
+          value: right
+      update:
+        text:
+          signal: title
+
+
+  ```
+
+
+
+</div>
+<div id="visdown-output"></div>
+
+<script src="visdown.js"></script>
+
+</body>
+</html>

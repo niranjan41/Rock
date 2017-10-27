@@ -1,0 +1,163 @@
+<!doctype html>
+<html id="visdown" lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Visdown - Markdown for Visualisation</title>
+    <meta name="description" content="Create Simple Visualisation Charts with Markdown">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script src="lib/vega.min.js"></script>
+    <script src="lib/vega-lite.min.js"></script>
+    <script src="lib/vega-embed.min.js"></script>
+    <script src="lib/marked.min.js"></script>
+    <script src="lib/yaml.min.js"></script>
+
+    <style>
+      #visdown-output {
+        max-width: 800px;
+        margin: 0 auto;
+      }
+
+      #visdown-input {
+        display: none;
+      }
+    </style>
+
+</head>
+<body>
+
+<div id="graph1"></div>
+<div id="visdown-input">
+
+<script>
+var graph1 =
+{
+  "$schema" : "https://vega.github.io/schema/vega/v3.0.json",
+  "width" : "900",
+  "data": {
+    "name":"plays",
+    "url":"data/zone.csv"
+  }
+}
+
+vega.embed("graph1",graph1);
+
+</script>
+
+
+
+
+```vis
+$schema: https://vega.github.io/schema/vega/v3.0.json
+width: 900
+height: 560
+padding:
+  top: 0
+  left: 0
+  right: 0
+  bottom: 0
+
+signals:
+
+data:
+- name: plays
+  url: data/zone.csv
+  format:
+    type: csv
+    parse: auto
+  transform:
+  - type: aggregate
+    groupby:
+    - played
+    fields:
+    - played
+    as:
+    - played
+- name: states
+  url: data/us-10m.json
+  format:
+    type: topojson
+    feature: states
+  transform:
+  - type: geopath
+    projection: projection
+- name: artists
+  url: data/zone.csv
+  format:
+    type: csv
+    parse: auto
+  transform:
+  - type: geopoint
+    projection: projection
+    fields:
+    - longitude
+    - latitude
+  - type: filter
+    expr: datum.x != null && datum.y != null
+
+
+projections:
+- name: projection
+  type: albersUsa
+  scale: 1200
+  translate:
+  - signal: width/2
+  - signal: height/2
+
+scales:
+- name: size
+  type: linear
+  domain:
+    data: plays
+    field: played
+  range:
+  - 1
+  - 500
+
+
+
+marks:
+- type: path
+  from:
+    data: states
+  encode:
+    enter:
+      fill:
+        value: "#dedede"
+      stroke:
+        value: white
+    update:
+      path:
+        field: path
+- type: symbol
+  from:
+    data: artists
+  encode:
+    enter:
+      size:
+        scale: size
+        field: played
+      fill:
+        value: steelblue
+      fillOpacity:
+        value: 0.8
+      stroke:
+        value: white
+      strokeWidth:
+        value: 1.5
+    update:
+      x:
+        field: x
+      y:
+        field: y
+
+
+```
+
+</div>
+<div id="visdown-output"></div>
+
+<script src="visdown.js"></script>
+
+</body>
+</html>

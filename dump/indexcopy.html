@@ -1,0 +1,296 @@
+<!doctype html>
+<html id="visdown" lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Visdown - Markdown for Visualisation</title>
+    <meta name="description" content="Create Simple Visualisation Charts with Markdown">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script src="lib/vega.min.js"></script>
+    <script src="lib/vega-lite.min.js"></script>
+    <script src="lib/vega-embed.min.js"></script>
+    <script src="lib/marked.min.js"></script>
+    <script src="lib/yaml.min.js"></script>
+
+    <style>
+      #visdown-output {
+        max-width: 800px;
+        margin: 0 auto;
+      }
+
+      #visdown-input {
+        display: none;
+      }
+    </style>
+
+</head>
+<body>
+
+<div id="visdown-input">
+  # Classic rock
+
+
+  ```vis
+  width: 600
+  height: 400
+  data:
+    url: data/data.csv
+
+  selection:
+    mouHov:
+     type: multi
+     'on': mouseover
+     nearest: true
+
+  mark: bar
+  encoding:
+    x:
+
+      type: nominal
+      field: Release Year
+      axis:
+        grid: 0
+    y:
+      type: quantitative
+      field: PlayCount
+      axis:
+        grid: 0
+    color:
+      field: PlayCount
+      type: quantitative
+    tooltip:
+        field: PlayCount
+        type: quantitative
+
+  ```
+
+  ```vis
+  width: 600
+  height: 400
+  data:
+    url: data/list2.csv
+  selection:
+    grid:
+      type: interval
+      bind: scales
+  mark: circle
+  encoding:
+    x:
+      type: quantitative
+      field: Percentage of Plays
+      axis:
+        grid: 0
+
+
+
+
+    y:
+      type: nominal
+      field: Artist
+      saxis:
+        grid: 0
+
+
+    size:
+      field: Percentage of Plays
+      type: quantitative
+    tooltip:
+      field: Artist
+      type: nominal
+
+
+
+
+  ```
+
+  ```vis
+  width: 600
+  height: 400
+  data:
+    url: data/list2.csv
+  selection:
+    paintbrush:
+      type: multi
+      'on': mouseover
+      nearest: true
+
+  mark: circle
+  encoding:
+    x:
+      type: quantitative
+      field: Percentage of Plays
+      axis:
+        grid: 0
+
+    y:
+      type: nominal
+      field: Artist
+      axis:
+        grid: 0
+
+    color:
+      condition:
+        selection: paintbrush
+        field: Percentage of Plays
+        type: nominal
+      value: grey
+
+
+    size:
+      field: Percentage of Plays
+      type: quantitative
+    tooltip:
+      field: Artist
+      type: nominal
+
+
+
+
+  ```
+
+  ```vis
+  width: 600
+  height: 400
+  data:
+    url: data/list1.csv
+
+  mark: bar
+  encoding:
+    x:
+      type: quantitative
+      field: Play Count
+      scale:
+        rangeStep: 1
+
+
+    y:
+      type: ordinal
+      field: Song
+      sort: descending
+    color:
+      type: Ordinal
+      field: Play Count
+    tooltip:
+      type: quantitative
+      field: Play Count
+
+
+  ```
+
+
+  ```vis
+    width: 600
+    height: 400
+    data:
+      url: data/zone.csv
+
+    mark: circle
+    encoding:
+      x:
+        type: nominal
+        field: artist
+
+      y:
+        type: nominal
+        field: cities
+
+      size:
+        field: played
+        type: quantitative
+      color:
+        type: ordinal
+        field: zone
+      tooltip:
+        type: nominal
+        field: artist
+
+
+
+
+  ```
+
+
+``
+
+```vis
+
+
+"$schema": https://vega.github.io/schema/vega/v3.0.json
+width: 960
+height: 500
+autosize: none
+data:
+- name: unemp
+  url: data/unemployment.tsv
+  format:
+    type: tsv
+    parse: auto
+- name: counties
+  url: data/us-10m.json
+  format:
+    type: topojson
+    feature: counties
+  transform:
+  - type: lookup
+    from: unemp
+    key: id
+    fields:
+    - id
+    values:
+    - rate
+  - type: filter
+    expr: datum.rate != null
+projections:
+- name: projection
+  type: albersUsa
+scales:
+- name: color
+  type: quantize
+  domain:
+  - 0
+  - 0.15
+  range:
+    scheme: blues-9
+legends:
+- fill: color
+  orient: bottom-right
+  title: Unemployment
+  format: 0.1%
+  encode:
+    symbols:
+      update:
+        shape:
+          value: square
+        stroke:
+          value: "#ccc"
+        strokeWidth:
+          value: 0.2
+marks:
+- type: shape
+  from:
+    data: counties
+  encode:
+    enter:
+      tooltip:
+        signal: format(datum.rate, '0.1%')
+    update:
+      fill:
+        scale: color
+        field: rate
+    hover:
+      fill:
+        value: red
+  transform:
+  - type: geoshape
+    projection: projection
+```
+
+
+
+</div>
+<div id="visdown-output"></div>
+
+<script src="visdown.js"></script>
+
+</body>
+</html>

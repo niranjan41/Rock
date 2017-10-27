@@ -1,0 +1,156 @@
+<!doctype html>
+<html id="visdown" lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Visdown - Markdown for Visualisation</title>
+    <meta name="description" content="Create Simple Visualisation Charts with Markdown">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script src="lib/vega.min.js"></script>
+    <script src="lib/vega-lite.min.js"></script>
+    <script src="lib/vega-embed.min.js"></script>
+    <script src="lib/marked.min.js"></script>
+    <script src="lib/yaml.min.js"></script>
+
+    <style>
+      #visdown-output {
+        max-width: 800px;
+        margin: 0 auto;
+      }
+
+      #visdown-input {
+        display: none;
+      }
+    </style>
+
+</head>
+<body>
+
+<div id="visdown-input">
+  # Test Simple interaction
+
+```vis
+  width: 400
+  height: 400
+  data:
+    url: data/old/sample.csv
+  selection:
+    pts:
+      type: single
+      fields:
+      - area
+      bind:
+        input: select
+        options:
+        - North
+        - East
+        - West
+        - South
+        - Central
+
+
+  mark: circle
+  encoding:
+    x:
+      type: quantitative
+      field: sales
+    y:
+      type: quantitative
+      field: profit
+    tooltip:
+      field: profit
+      type: quantitative
+    color:
+      value: grey
+      condition:
+        selection: pts
+        field: area
+        type: nominal
+    size:
+     value: 500
+```
+
+
+```vis
+width: 400
+height: 400
+data:
+ url: "data/old/notes.csv"
+selection:
+ mouHov:
+   type: multi
+   'on': mouseover
+mark: line
+encoding:
+ x:
+   type: nominal
+   field: denom
+ y:
+   type: quantitative
+   field: number
+ color:
+     value: grey
+     condition:
+       selection: mouHov
+       field: year
+       type: quantitative
+ tooltip:
+     field: year
+     type: quantitative
+
+```
+
+
+
+
+```vis
+data:
+  url: data/old/notes.csv
+vconcat:
+- width: 480
+  mark: circle
+  encoding:
+    x:
+      field: year
+      type: temporal
+      scale:
+        domain:
+          selection: brush
+      axis:
+        title: ''
+        labelAngle: 0
+    y:
+      field: number
+      type: quantitative
+- width: 480
+  height: 60
+  mark: circle
+  selection:
+    brush:
+      type: interval
+      encodings:
+      - x
+  encoding:
+    x:
+      field: year
+      type: temporal
+      axis:
+        format: "%Y"
+        labelAngle: 0
+    y:
+      field: number
+      type: quantitative
+      axis:
+        tickCount: 3
+        grid: false
+```
+
+
+
+</div>
+<div id="visdown-output"></div>
+
+<script src="visdown.js"></script>
+
+</body>
+</html>
