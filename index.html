@@ -15,10 +15,11 @@
         <link href='http://fonts.googleapis.com/css?family=Raleway:100|Open+Sans:400,300' rel='stylesheet' type='text/css'>
 
         <link rel="stylesheet" href="css/main.css">
+        <script src="http://code.jquery.com/jquery-2.1.0.min.js"></script>
 
         <script src="js/vendor/modernizr-2.6.2-respond-1.1.0.min.js"></script>
     </head>
-    <script src="http://code.jquery.com/jquery-2.1.0.min.js"></script>
+
     <body>
         <!--[if lt IE 7]>
             <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
@@ -59,7 +60,7 @@ It was my first time hearing a band I grew up with referred to as “classic roc
 
                 <script>
                   $.get('img/bands.svg', function(data) {
-                  // $.get('fruit_font.svg', function(data) {
+
                     $(document.body).append(data.documentElement);
 
 
